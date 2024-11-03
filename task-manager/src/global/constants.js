@@ -1,4 +1,5 @@
-export const BASE_URL = "https://jsonplaceholder.typicode.com";
+export const BASE_URL = "http://localhost:5500";
 export const ENDPOINTS = {
-    TASKS: '/todos'
+    LOGIN: '/login',
+    TASKS: '/task'
 };

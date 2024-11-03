@@ -1,7 +1,12 @@
 .min-height100 {
   min-height: 100vh;
 }
-
+.login-container {
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 .pt-45 {
   padding-top: 4.5rem !important;
 }

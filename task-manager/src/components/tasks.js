@@ -3,7 +3,6 @@ import { faTasks } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CardTask from './cardTask';
 import LoaderComponent from './loader';
-import AddNew from './addNew';
 import * as CONSTANTS from '../global/constants';
 
 class TasksComponent extends React.Component{
@@ -40,23 +39,21 @@ class TasksComponent extends React.Component{
         }
     }
 
-    handleStatusOk = async (value)=> {
-        let task = {
-            id: value.id,
-            title: value.title,
+    statusOk = async (value)=> {
+        let dataTask = {
             completed: true
         }
         try {
             let config = {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(task)
-            }
+              method: "PUT",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(dataTask),
+            };
 
-            await fetch(`${CONSTANTS.BASE_URL}${CONSTANTS.ENDPOINTS.TASKS}${value.id}`, config);
+            await fetch(`${CONSTANTS.BASE_URL}${CONSTANTS.ENDPOINTS.TASKS}/${value._id}`, config);
             await this.getAllTasks();
             this.setState({
               loading: false,
@@ -69,25 +66,27 @@ class TasksComponent extends React.Component{
         }
     }
 
-    handleDeleteTask = async (value)=> {
-        let task = {
-            id: value.id
+    deleteTask = async (value)=> {
+        console.log(value);
+        let dataTask = {
+            enabled: false
         }
         try {
             let config = {
-                method: 'DELETE',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(task)
-            }
-            await fetch(`${CONSTANTS.BASE_URL}${CONSTANTS.ENDPOINTS.TASKS}${value.id}`, config);
+              method: "PUT",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(dataTask),
+            };
+            await fetch(`${CONSTANTS.BASE_URL}${CONSTANTS.ENDPOINTS.TASKS}/${value._id}`, config);
             await this.getAllTasks();
             this.setState({
               loading: false,
             });
         } catch (error) {
+            console.log(error)
             this.setState({
                 loading: false,
                 error
@@ -95,43 +94,14 @@ class TasksComponent extends React.Component{
         }
     }
 
-    handleSubmit = async (value) => {
-        this.setState({
-            loading: true
-        });
-        try {
-            let config = {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(value)
-            }
-            
-            await fetch(`${CONSTANTS.BASE_URL}${CONSTANTS.ENDPOINTS.TASKS}`, config);
-            await this.getAllTasks();
-            this.props.history.push('/');
-            this.setState({
-              loading: false,
-            });
-        } catch (error) {
-            this.setState({
-                loading: false,
-                error
-            });
-        }
-    }
 
     render(){
+        const tasksLength = this.state.tasks.length;
         if(this.state.loading){
             return <LoaderComponent/>
         } else {
             return (
-              <div>
-                <AddNew 
-                    propSubmit={this.handleSubmit}
-                />
+              <div className="container container-custom">
                 <div className="py-3">
                   <div className="row mb-3 px-5">
                     <div className="col-12">
@@ -142,18 +112,25 @@ class TasksComponent extends React.Component{
                     </div>
                   </div>
 
-                  {this.state.tasks.map((task) => {
-                    return (
-                      <CardTask
-                        key={task.id}
-                        id={task.id}
-                        title={task.title}
-                        completed={task.completed}
-                        propStatusOK={() => this.handleStatusOk(task)}
-                        propDeleteTask={() => this.handleDeleteTask(task)}
-                      />
-                    );
-                  })}
+                  {tasksLength ? (
+                    this.state.tasks.map((task) => {
+                      return (
+                        <CardTask
+                          key={task._id}
+                          id={task._id}
+                          title={task.title}
+                          description={task.description}
+                          completed={task.completed}
+                          propStatusOK={() => this.statusOk(task)}
+                          propDeleteTask={() => this.deleteTask(task)}
+                        />
+                      );
+                    })
+                  ) : (
+                    <div class="alert alert-warning" role="alert">
+                      No se han registrado tareas aun :(
+                    </div>
+                  )}
                 </div>
               </div>
             );

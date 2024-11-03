@@ -8,16 +8,13 @@ class CardTask extends React.Component{
     render(){
         let classStatus = "badge rounded-pill";
         let statusTask = '';
-        let stylesTaskOk = '';
 
-        if (this.props.completed === '1') {
-            classStatus += " text-light-emphasis text-bg-success";
+        if (this.props.completed) {
+            classStatus += " text-light text-bg-success";
             statusTask = 'Completada';
-            stylesTaskOk = 'line-through';
         } else {
-            classStatus += " text-light-emphasis text-bg-warning";
+            classStatus += " text-light text-bg-warning";
             statusTask = 'Pendiente';
-            stylesTaskOk = 'none'
         };
         
         return (
@@ -27,8 +24,12 @@ class CardTask extends React.Component{
                 <div className="card-body">
                   <h5 className="card-title">
                     <FontAwesomeIcon icon={faCalendar} className="me-2" />
-                    <span style={{ textDecoration: stylesTaskOk }}>
+                    <span className='fw-bold'>
                       {this.props.title}
+                    </span>
+                    <br />
+                    <span className='text-secondary'>
+                      {this.props.description}
                     </span>
                   </h5>
                   <div className="d-flex justify-content-between align-items-end">

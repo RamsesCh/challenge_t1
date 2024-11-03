@@ -1,8 +1,15 @@
+import 'dotenv/config';
 import express from 'express';
+import usersController from "./_controllers/users.js";
 import tasksController from './_controllers/tasks.js';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 
 const app = express();
+
+app.use(cors({
+  origin: "*",
+}));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -11,19 +18,22 @@ app.get("/", (req, res) => {
   res.send("API REST CHALLENGE :-)");
 });
 
-app.get("/tasks", tasksController.allTask);
+app.post("/login", usersController.login);
+
+app.get("/task", tasksController.allTask);
 
 app.post("/task", tasksController.createTask);
 
-app.put("/:id", tasksController.updateTask);
+app.put("/task/:id", tasksController.updateTask);
 
-app.delete("/:id", tasksController.deleteTask);
+app.delete("/task/:id", tasksController.deleteTask);
 
 try {
-    app.listen(8000, () => {
-      console.log("Server iniciado en el puerto 8000.");
-    });
+  const PORT = process.env.PORT || 8000;
+  app.listen(PORT, () => {
+    console.log("Server iniciado en el puerto " + PORT);
+  });
 } catch (e) {
-    console.log(e);
+  console.log(e);
 }
 
