@@ -40,17 +40,13 @@ class TasksComponent extends React.Component{
     }
 
     statusOk = async (value)=> {
-        let dataTask = {
-            completed: true
-        }
         try {
             let config = {
               method: "PUT",
               headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
-              },
-              body: JSON.stringify(dataTask),
+              }
             };
 
             await fetch(`${CONSTANTS.BASE_URL}${CONSTANTS.ENDPOINTS.TASKS}/${value._id}`, config);
