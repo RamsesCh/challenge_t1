@@ -13,7 +13,7 @@ class usersController {
               const acc_tk = jwt.sign({
                 sub: dataUser._id,
                 name: dataUser.mail,
-                exp: Date.now() + 600 * 1000
+                exp: Date.now() + 3600 * 1000
               }, secret);
 
               await usersModel.registerToken(acc_tk, req.body);

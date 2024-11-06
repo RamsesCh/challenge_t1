@@ -10,9 +10,23 @@ class tasksModel {
     return await tasks.insertOne(task);
   }
 
-  async getTasks(idUser) {
+  async getTasks(idUser, filterStatus) {
     const tasks = configdb.db.collection(dbCollection);
-    return await tasks.find({id_user: idUser, enabled: true}).toArray();
+    let queryFilter = {
+      id_user: idUser,
+      enabled: true
+    };
+    
+    if (filterStatus != undefined){
+      if (filterStatus == "true"){
+        queryFilter.completed = true;
+      } else {
+        queryFilter.completed = false;
+      }
+    }
+      
+
+    return await tasks.find(queryFilter).toArray();
   }
 
   async setTaskCompleted(idTask) {

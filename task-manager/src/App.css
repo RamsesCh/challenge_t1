@@ -12,7 +12,8 @@
 }
 
 .container-custom {
-  width: 50% !important;
+  width: 60% !important;
+  padding-top: 5.5rem !important;
 }
 
 .loaderContent {

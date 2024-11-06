@@ -1,7 +1,4 @@
 import tasksModel from '../_models/tasks.js';
-import jwt from "jsonwebtoken";
-
-const secret = process.env.SECRET_KEY;
 
 class tasksController {
   constructor() {}
@@ -9,12 +6,13 @@ class tasksController {
   async allTask(req, res) {
     try {
       const {idUser} = req.session;
-
+      const filterStatus = req.query.completed;
+      
       if(!idUser){
         return res.status(401).send({ error: "authorization required" }); 
       }
 
-      const data = await tasksModel.getTasks(idUser);
+      const data = await tasksModel.getTasks(idUser, filterStatus);
       res.status(200).json(data);
     } catch (err) {
       res.status(500).send({error: err.message});
@@ -34,6 +32,7 @@ class tasksController {
         id_user: idUser,
         completed: false,
         enabled: true,
+        creation_date: new Date(Date.now()),
       };
       const data = await tasksModel.createTask(dataTask);
       res.status(200).json(data);

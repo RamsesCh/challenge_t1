@@ -1,22 +1,31 @@
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
-import './App.css';
-import LoginComponent from './components/login';
+import React, { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./App.css";
+import LoginComponent from "./components/login";
 import TasksComponent from "./components/tasks";
 import AddNew from "./components/addNew";
 import Navbar from "./components/navbar";
 
-
 function App() {
-  const acc_tk = sessionStorage.getItem('acc_tk');
+
+  const [isLogged, setIsLogged] = useState();
+
+  const updateLogged = async (data) => {
+    setIsLogged(data);
+  };
 
   return (
     <BrowserRouter>
       <div className="bg-light min-height100">
-        {acc_tk ? <Navbar /> : <Navbar />}
-        <div className="container pt-45">
+        {isLogged ? <Navbar logged={updateLogged} /> : ""}
+        <div className="container-fluid">
           <Routes>
-            {/* <Route path="/" exact element={<LoginComponent />} /> */}
-            <Route path="/" element={<TasksComponent />} />
+            <Route
+              path="/"
+              exact
+              element={<LoginComponent logged={updateLogged} />}
+            />
+            <Route path="/tasks" element={<TasksComponent />} />
             <Route path="/addNew" element={<AddNew />} />
           </Routes>
         </div>
